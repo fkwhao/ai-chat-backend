@@ -1,0 +1,25 @@
+server:
+  port: 8090
+  netty:
+    connection-timeout: 10000s
+
+spring:
+  application:
+    name: ai-chat-gateway
+
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    # 指定 SQLite 数据库文件路径存放在项目根目录
+    url: jdbc:sqlite:chat_history.db
+    # SQLite 不需要严格的账密
+    username:
+    password:
+
+  sql:
+    init:
+      mode: always # 总是执行初始化脚本
+      schema-locations: classpath:schema.sql # 明确指定脚本文件的位置
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 打印 SQL 日
