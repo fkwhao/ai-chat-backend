@@ -12,6 +12,6 @@ public class ChatRequestDto {
     @Data
     public static class Message {
         private String role;
-        private String content;
+        private Object content;
     }
 }
