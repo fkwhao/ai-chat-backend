@@ -44,6 +44,13 @@ public class ChatGatewayController {
             attachRagContext(request);
         }
 
+        // 启用 token usage 统计
+        if (request.isStream()) {
+            request.setStreamOptions(Map.of("include_usage", true));
+        }
+
+        log.info("Sending request to API: streamOptions={}", request.getStreamOptions());
+
         return webClient.post()
                 .uri(targetApiUrl)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + userApiKey)

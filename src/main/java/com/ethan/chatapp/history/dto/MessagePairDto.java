@@ -7,4 +7,5 @@ public class MessagePairDto {
     private String userContent;
     private String assistantContent;
     private String reasoningContent;
+    private Integer tokens;
 }

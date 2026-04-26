@@ -9,12 +9,14 @@ import java.time.LocalDateTime;
 public class ChatSession {
     @TableId(type = IdType.ASSIGN_ID)
     private String id;
-    
+
     private String title;
-    
+
+    private Integer totalTokens;
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
-    
+
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 }

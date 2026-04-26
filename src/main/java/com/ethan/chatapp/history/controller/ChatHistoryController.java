@@ -55,9 +55,16 @@ public class ChatHistoryController {
                 sessionId,
                 dto.getUserContent(),
                 dto.getAssistantContent(),
-                dto.getReasoningContent()
+                dto.getReasoningContent(),
+                dto.getTokens()
         );
         return "success";
+    }
+
+    // 6. 获取会话信息（包括 totalTokens）
+    @GetMapping("/session/{sessionId}")
+    public ChatSession getSession(@PathVariable String sessionId) {
+        return chatHistoryService.getSessionById(sessionId);
     }
 
     // 6. 截断历史：删除某条消息及其之后的所有消息 (用于重新编辑)
