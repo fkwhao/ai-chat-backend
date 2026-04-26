@@ -2,6 +2,8 @@ package com.ethan.chatapp.history.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ethan.chatapp.history.dto.SessionTokenDto;
+import com.ethan.chatapp.history.dto.TokenStatsDto;
 import com.ethan.chatapp.history.entity.ChatMessage;
 import com.ethan.chatapp.history.entity.ChatSession;
 import com.ethan.chatapp.history.mapper.ChatMessageMapper;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -125,5 +129,58 @@ public class ChatHistoryServiceImpl implements ChatHistoryService {
                     .eq("session_id", sessionId)
                     .ge("create_time", targetMsg.getCreateTime()));
         }
+    }
+
+    @Override
+    public TokenStatsDto getTokenStats() {
+        TokenStatsDto stats = new TokenStatsDto();
+
+        // 总 token 数
+        List<ChatSession> sessions = sessionMapper.selectList(null);
+        long totalTokens = sessions.stream()
+                .mapToLong(s -> s.getTotalTokens() != null ? s.getTotalTokens() : 0)
+                .sum();
+        stats.setTotalTokens(totalTokens);
+
+        // 总会话数
+        stats.setTotalSessions(sessions.size());
+
+        // 总消息数
+        Long totalMessages = messageMapper.selectCount(null);
+        stats.setTotalMessages(totalMessages != null ? totalMessages : 0);
+
+        // 平均每会话 token
+        if (sessions.size() > 0) {
+            stats.setAvgTokensPerSession((double) totalTokens / sessions.size());
+        } else {
+            stats.setAvgTokensPerSession(0.0);
+        }
+
+        return stats;
+    }
+
+    @Override
+    public List<SessionTokenDto> getTopSessionsByTokens(int limit) {
+        List<ChatSession> sessions = sessionMapper.selectList(
+                new QueryWrapper<ChatSession>()
+                        .orderByDesc("total_tokens")
+                        .last("LIMIT " + limit)
+        );
+
+        List<SessionTokenDto> result = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        for (ChatSession session : sessions) {
+            SessionTokenDto dto = new SessionTokenDto();
+            dto.setSessionId(session.getId());
+            dto.setTitle(session.getTitle());
+            dto.setTotalTokens(session.getTotalTokens() != null ? session.getTotalTokens() : 0);
+            if (session.getUpdateTime() != null) {
+                dto.setUpdateTime(session.getUpdateTime().format(formatter));
+            }
+            result.add(dto);
+        }
+
+        return result;
     }
 }

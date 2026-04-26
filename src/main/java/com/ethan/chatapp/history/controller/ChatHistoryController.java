@@ -2,6 +2,8 @@ package com.ethan.chatapp.history.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ethan.chatapp.history.dto.MessagePairDto;
+import com.ethan.chatapp.history.dto.SessionTokenDto;
+import com.ethan.chatapp.history.dto.TokenStatsDto;
 import com.ethan.chatapp.history.entity.ChatMessage;
 import com.ethan.chatapp.history.entity.ChatSession;
 import com.ethan.chatapp.history.service.ChatHistoryService;
@@ -72,6 +74,18 @@ public class ChatHistoryController {
     public String deleteMessagesFrom(@PathVariable String sessionId, @PathVariable String messageId) {
         chatHistoryService.deleteMessagesFrom(sessionId, messageId);
         return "success";
+    }
+
+    // 7. 获取 token 统计信息
+    @GetMapping("/token-stats")
+    public TokenStatsDto getTokenStats() {
+        return chatHistoryService.getTokenStats();
+    }
+
+    // 8. 获取 token 消耗排行
+    @GetMapping("/token-ranking")
+    public List<SessionTokenDto> getTokenRanking(@RequestParam(defaultValue = "10") int limit) {
+        return chatHistoryService.getTopSessionsByTokens(limit);
     }
 
 }

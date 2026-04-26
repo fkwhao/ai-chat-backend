@@ -32,4 +32,10 @@ public interface ChatHistoryService {
 
     // 截断消息：删除某个会话中指定消息及其之后的所有记录
     void deleteMessagesFrom(String sessionId, String messageId);
+
+    // 获取 token 统计信息
+    TokenStatsDto getTokenStats();
+
+    // 获取各会话 token 排行
+    List<SessionTokenDto> getTopSessionsByTokens(int limit);
 }
