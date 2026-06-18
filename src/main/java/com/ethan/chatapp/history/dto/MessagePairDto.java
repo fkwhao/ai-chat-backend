@@ -8,4 +8,5 @@ public class MessagePairDto {
     private String assistantContent;
     private String reasoningContent;
     private Integer tokens;
+    private String model;
 }

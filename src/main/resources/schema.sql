@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS chat_session (
                                             id TEXT PRIMARY KEY,
                                             title TEXT NOT NULL,
                                             total_tokens INTEGER DEFAULT 0,
+                                            model TEXT,
                                             create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
                                             update_time DATETIME DEFAULT CURRENT_TIMESTAMP
 );
@@ -12,6 +13,7 @@ CREATE TABLE IF NOT EXISTS chat_message (
                                             role TEXT NOT NULL,
                                             content TEXT,
                                             reasoning_content TEXT,
+                                            model TEXT,
                                             create_time DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 

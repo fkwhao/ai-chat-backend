@@ -13,6 +13,7 @@ public class ChatSession {
     private String title;
 
     private Integer totalTokens;
+    private String model;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;

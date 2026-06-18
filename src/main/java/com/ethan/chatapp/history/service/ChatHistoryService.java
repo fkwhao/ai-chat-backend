@@ -3,6 +3,10 @@ package com.ethan.chatapp.history.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ethan.chatapp.history.dto.SessionTokenDto;
 import com.ethan.chatapp.history.dto.TokenStatsDto;
+import com.ethan.chatapp.history.dto.UsageOverviewDto;
+import com.ethan.chatapp.history.dto.ModelBreakdownDto;
+import com.ethan.chatapp.history.dto.DailyTrendDto;
+import com.ethan.chatapp.history.dto.ActivityHeatmapDto;
 import com.ethan.chatapp.history.entity.ChatMessage;
 import com.ethan.chatapp.history.entity.ChatSession;
 
@@ -27,6 +31,9 @@ public interface ChatHistoryService {
     // 保存一轮对话并累加 token
     void saveMessagePair(String sessionId, String userContent, String assistantContent, String reasoningContent, Integer tokens);
 
+    // 保存一轮对话并累加 token + 记录模型
+    void saveMessagePair(String sessionId, String userContent, String assistantContent, String reasoningContent, Integer tokens, String model);
+
     // 删除某个会话及其关联的所有消息
     void deleteSession(String sessionId);
 
@@ -40,4 +47,10 @@ public interface ChatHistoryService {
 
     // 获取各会话 token 排行
     List<SessionTokenDto> getTopSessionsByTokens(int limit);
+
+    // ── 新增：使用统计 ──
+    UsageOverviewDto getUsageOverview(int days);
+    List<ModelBreakdownDto> getModelBreakdown(int days);
+    List<DailyTrendDto> getDailyTrend(int days);
+    List<ActivityHeatmapDto> getActivityHeatmap(int days);
 }

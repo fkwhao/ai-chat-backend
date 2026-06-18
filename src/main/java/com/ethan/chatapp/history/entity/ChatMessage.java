@@ -14,7 +14,8 @@ public class ChatMessage {
     private String role; // "user" / "assistant"
     private String content;
     private String reasoningContent;
-    
+    private String model;
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 }
